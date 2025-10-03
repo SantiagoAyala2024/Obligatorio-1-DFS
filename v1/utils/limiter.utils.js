@@ -2,7 +2,7 @@ import rateLimit from "express-rate-limit";
 
 export const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 30,                 
+  max: 1000,                 
   message: "Demasiadas peticiones, intente más tarde.",
   handler: (req, res, next, options) => {
     res.status(options.statusCode).json({
