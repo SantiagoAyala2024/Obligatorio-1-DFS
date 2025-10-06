@@ -25,7 +25,7 @@ export const registrarSerieService = async (datosSerie, userId) => {
             usuario.series.push(serie._id);
             await usuario.save();
         }else{
-            let err = new Error("Limite Alcanzado. Cambie al Plan Premium"); //Probar
+            let err = new Error("Limite Alcanzado. Cambie al Plan Premium");
             err.status = 403;
             throw err;
         }

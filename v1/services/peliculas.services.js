@@ -25,7 +25,7 @@ export const registrarPeliculaService = async (datosPelicula, userId) => {
             usuario.peliculas.push(pelicula._id);
             await usuario.save();
         }else{
-            let err = new Error("Limite Alcanzado. Cambie al Plan Premium"); //Probar
+            let err = new Error("Limite Alcanzado. Cambie al Plan Premium");
             err.status = 403;
             throw err;
         }
