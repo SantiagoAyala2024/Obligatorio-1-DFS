@@ -12,9 +12,4 @@ const usuarioSchema = new Schema({
     series: [{type: Schema.Types.ObjectId, ref:'Serie'}]
 });
 
-usuarioSchema.pre('save', function (next) {
-    this.username = this.username.toLowerCase();
-    next();
-});
-
 export default mongoose.model('Usuario', usuarioSchema);
