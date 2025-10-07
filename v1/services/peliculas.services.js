@@ -73,7 +73,8 @@ export const modificarPeliculaPorIdService = async (id, datosNuevos) => {
 export const eliminarPeliculaService = async (id, userId) => {
 
     const usuario = await Usuario.findById(userId).populate("peliculas");
-    const peliculaEncontrada = await Pelicula.findById(id);
+    //const peliculaEncontrada = await Pelicula.findById(id);
+    const peliculaEncontrada = await usuario.peliculas.findById(id);
     if(!peliculaEncontrada){
         let err = new Error("No se encontro la pelicula a eliminar");
         err.status = 404;
