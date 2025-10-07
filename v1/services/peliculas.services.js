@@ -72,17 +72,20 @@ export const modificarPeliculaPorIdService = async (id, datosNuevos) => {
 
 export const eliminarPeliculaService = async (id, userId) => {
 
-    const usuario = await Usuario.findById(userId).populate("peliculas");
-    //const peliculaEncontrada = await Pelicula.findById(id);
-    const peliculaEncontrada = usuario.peliculas.find(pelicula => pelicula._id === id);
+    //const usuario = await Usuario.findById(userId).populate("peliculas");
+    const peliculaEncontrada = await Pelicula.findById(id);
+    //const peliculaEncontrada = usuario.peliculas.find(pelicula => pelicula._id === id);
+    console.log(peliculaEncontrada);
     if(!peliculaEncontrada){
         let err = new Error("No se encontro la pelicula a eliminar");
         err.status = 404;
         throw err;
     }    
-    const peliculaEliminar = await Pelicula.findByIdAndDelete(id);
-    usuario.peliculas.pull(id);
+    const usuario = usuario.peliculas.findByIdAndUpdate(userId, { $pull: { peliculas: id } }); 
     usuario.save();
+    if(usuario){
+        const peliculaEliminar = await Pelicula.findByIdAndDelete(id);        
+    }
     return peliculaEliminar;
 }
 
