@@ -70,6 +70,7 @@ export const modificarPeliculaPorIdService = async (id, datosNuevos) => {
     return pelicula;
 }
 
+/*
 export const eliminarPeliculaService = async (id, userId) => {
 
     //const usuario = await Usuario.findById(userId).populate("peliculas");
@@ -86,5 +87,55 @@ export const eliminarPeliculaService = async (id, userId) => {
         const peliculaEliminar = await Pelicula.findByIdAndDelete(id);        
     }
     return peliculaEliminar;
+}
+*/
+
+export const eliminarPeliculaService = async (id, userId) => {
+    // Asegúrate de usar 'await' aquí.
+    const peliculaEncontrada = await Pelicula.findById(id); 
+    
+    if(!peliculaEncontrada){
+        let err = new Error("No se encontró la película a eliminar");
+        err.status = 404;
+        throw err;
+    }    
+
+    // 1. BUSCAR EL USUARIO y sus películas
+    // No usamos findByIdAndUpdate aquí, solo findById para inspeccionar el array.
+    const usuario = await Usuario.findById(userId);
+
+    if (!usuario) {
+        let err = new Error("Usuario no encontrado");
+        err.status = 404;
+        throw err;
+    }
+
+    // 2. VERIFICAR SI EL ID ESTÁ VINCULADO
+    // Usamos .some() para verificar si el array contiene el ID de la película.
+    // Usamos .toString() para asegurar la comparación entre ObjectId y String.
+    const estaVinculada = usuario.peliculas.some(
+        peliculaId => peliculaId.toString() === id.toString()
+    );
+
+    // 3. LÓGICA CONDICIONAL: Solo si está vinculada, se elimina.
+    if (estaVinculada) {
+        // A. Eliminar la referencia del usuario (el $pull). 
+        // Usamos await en la operación de actualización.
+        await Usuario.findByIdAndUpdate(
+            userId, 
+            { $pull: { peliculas: id } }
+        ); 
+        
+        // B. Borrar la película de la colección principal.
+        const peliculaEliminar = await Pelicula.findByIdAndDelete(id); 
+
+        return peliculaEliminar;
+
+    } else {
+        // 4. Si no está vinculada, lanzamos un error o retornamos un mensaje.
+        let err = new Error("La película no está vinculada al usuario y no puede ser eliminada por esta operación.");
+        err.status = 409; // Código 409 (Conflicto) es adecuado en este caso.
+        throw err;
+    }
 }
 
