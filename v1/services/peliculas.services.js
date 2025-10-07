@@ -82,7 +82,6 @@ export const eliminarPeliculaService = async (id, userId) => {
         throw err;
     }    
     const usuario = Usuario.findByIdAndUpdate(userId, { $pull: { peliculas: id } }); 
-    usuario.save();
     if(usuario){
         const peliculaEliminar = await Pelicula.findByIdAndDelete(id);        
     }
