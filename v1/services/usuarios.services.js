@@ -1,7 +1,7 @@
 import Usuario from '../models/usuario.model.js';
 
 export const obtenerUsuarioPorIdService = async (id) => {
-    const usuario = await Usuario.findById(id);
+    const usuario = await Usuario.findById(id).select('-password -__v');
     return usuario;
 }
 
@@ -18,4 +18,9 @@ export const obtenerPeliculasUsuarioPorIdService = async (id) => {
 export const obtenerSeriesUsuarioPorIdService = async (id) => {
     const usuario = await Usuario.findById(id).populate("series");
     return usuario.series;
+}
+
+export const obtenerUsuarioPeliculasSeriesPorIdService = async (id) => {
+    const usuario = await Usuario.findById(id).select('-password -__v').populate("peliculas").populate("series");
+    return usuario;
 }

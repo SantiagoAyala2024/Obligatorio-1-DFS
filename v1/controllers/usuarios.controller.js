@@ -1,4 +1,4 @@
-import { obtenerUsuarioPorIdService, obtenerPeliculasUsuarioPorIdService, modificarUsuarioPorIdService, obtenerSeriesUsuarioPorIdService } from "../services/usuarios.services.js";
+import { obtenerUsuarioPorIdService, obtenerPeliculasUsuarioPorIdService, modificarUsuarioPorIdService, obtenerSeriesUsuarioPorIdService, obtenerUsuarioPeliculasSeriesPorIdService } from "../services/usuarios.services.js";
 
 export const obtenerUsuarioPorId = async (req, res) => {
     const usuario = await obtenerUsuarioPorIdService(req.userId);
@@ -7,6 +7,14 @@ export const obtenerUsuarioPorId = async (req, res) => {
     }
     res.status(200).json(usuario);
 };
+
+export const obtenerUsuarioPeliculasSeriesPorId = async (req, res) => {
+    const usuario = await obtenerUsuarioPeliculasSeriesPorIdService(req.userId);
+    if(!usuario){
+        return res.status(404).json({ message: 'Usuario no encontrado'});
+    }
+    res.status(200).json(usuario);
+}
 
 export const obtenerPeliculasUsuarioPorId = async (req, res) => {
     const peliculas = await obtenerPeliculasUsuarioPorIdService(req.userId);
@@ -25,8 +33,7 @@ export const obtenerSeriesUsuarioPorId = async (req, res) => {
 }
     
 export const modificarUsuario = async (req, res) => {
-    const { id } = req.params;
-    const usuarioActualizado = await modificarUsuarioPorIdService(id, req.body);
+    const usuarioActualizado = await modificarUsuarioPorIdService(req.userId, req.body);
     if(!usuarioActualizado){
         return res.status(404).json({ message: 'Usuario no encontrado'});
     }

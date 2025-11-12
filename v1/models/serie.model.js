@@ -6,6 +6,7 @@ const serieSchema = new Schema({
     descripcion: {type: String, required: true},
     episodios: {type: Number, required: true},
     fecha: {type:Date, default: Date.now},
+    url: {type: String, required: true},
     generos: [{type: Schema.Types.ObjectId, ref:'Genero'}]
 });
 
