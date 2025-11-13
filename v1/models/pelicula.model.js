@@ -5,7 +5,7 @@ const peliculaSchema = new Schema({
     nombre: {type: String, required: true},
     descripcion: {type: String, required: true},
     duracion: {type: Number, required: true},
-    fecha: {type: Date, default: Date.now},
+    fecha: {type: Date, required: true}, //Date.now
     url: {type: String, required: true},
     generos: [{type: Schema.Types.ObjectId, ref:'Genero'}]
 });
